@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+
+## --------------------------- MCP-SERVER --------------------------- ##
+
+  mcp-server:
+    image: ${REGISTRY:-localhost}/mcp-server:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - GITHUB_REPO=https://github.com/tesla0225/mcp-create.git
+    volumes:
+      - /opt/mcp-create:/tmp/mcp-create-servers
+    networks:
+      - cloud
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      # Adicione outras variáveis de ambiente necessárias aqui
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+        - node.role == manager
+      labels:
+      - traefik.enable=1
+      - traefik.http.routers.mcp-server.rule=Host(`mcp.maiconbartoski.com`) # URL do MCP-Server
+      - traefik.http.routers.mcp-server.entrypoints=websecure
+      - traefik.http.routers.mcp-server.priority=1
+      - traefik.http.routers.mcp-server.tls.certresolver=letsencryptresolver
+      - traefik.http.routers.mcp-server.service=mcp-server
+      - traefik.http.services.mcp-server.loadbalancer.server.port=8080
+      - traefik.http.services.mcp-server.loadbalancer.passHostHeader=true
+
+## --------------------------- MCP-SERVER --------------------------- ##
+
+volumes:
+  mcp_servers:
+    external: false
+
+networks:
+  cloud: # Nome da rede interna
+    external: true
+    name: cloud # Nome da rede interna
