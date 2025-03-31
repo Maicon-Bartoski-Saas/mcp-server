@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - GITHUB_REPO=https://github.com/tesla0225/mcp-create.git
+        - GITHUB_REPO=https://github.com/Maicon-Bartoski-Saas/mcp-server.git
     volumes:
       - /opt/mcp-create:/tmp/mcp-create-servers
     networks:
