@@ -12,7 +12,7 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Definir argumento para o repositório Git
-ARG GITHUB_REPO=https://github.com/tesla0225/mcp-create.git
+ARG GITHUB_REPO=https://github.com/Maicon-Bartoski-Saas/mcp-server.git
 
 # Clonar o repositório diretamente
 RUN git clone ${GITHUB_REPO} .
